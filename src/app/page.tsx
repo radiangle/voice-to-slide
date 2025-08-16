@@ -23,11 +23,11 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
       <div className="max-w-6xl mx-auto">
-        <header className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">
+        <header className="text-center mb-16">
+          <h1 className="text-6xl font-black text-gray-800 mb-6 tracking-tight font-mono">
             Voice to Slide
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-2xl font-medium text-gray-600 max-w-3xl mx-auto leading-relaxed tracking-wide">
             Transform your 3-minute voice recordings into professional slide presentations
           </p>
         </header>

@@ -144,7 +144,8 @@ export default function AudioUploader({ onProcessing, onSlidesGenerated, isProce
 
     } catch (error) {
       console.error('Error processing audio:', error);
-      alert(`Error processing audio: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert(`Error processing audio: ${errorMessage}`);
       onProcessing(false);
     }
   };
@@ -158,11 +159,11 @@ export default function AudioUploader({ onProcessing, onSlidesGenerated, isProce
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white rounded-xl shadow-lg p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 tracking-tight">
             Upload or Record Audio
           </h2>
-          <p className="text-gray-600">
+          <p className="text-xl font-medium text-gray-600 leading-relaxed tracking-wide">
             Record up to 3 minutes or upload an audio file to generate your slides
           </p>
         </div>
@@ -175,25 +176,25 @@ export default function AudioUploader({ onProcessing, onSlidesGenerated, isProce
                 {!isRecording ? (
                   <button
                     onClick={startRecording}
-                    className="inline-flex items-center px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                    className="inline-flex items-center px-8 py-4 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors font-medium tracking-wide text-lg"
                     disabled={isProcessing}
                   >
-                    <Mic className="w-5 h-5 mr-2" />
+                    <Mic className="w-6 h-6 mr-3" />
                     Start Recording
                   </button>
                 ) : (
                   <button
                     onClick={stopRecording}
-                    className="inline-flex items-center px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                    className="inline-flex items-center px-8 py-4 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-colors font-medium tracking-wide text-lg"
                   >
-                    <Square className="w-5 h-5 mr-2" />
+                    <Square className="w-6 h-6 mr-3" />
                     Stop Recording
                   </button>
                 )}
               </div>
               
               {isRecording && (
-                <div className="text-red-500 font-mono text-lg">
+                <div className="text-red-500 font-bold text-2xl tracking-wider">
                   Recording: {formatTime(recordingTime)}
                 </div>
               )}
@@ -202,12 +203,12 @@ export default function AudioUploader({ onProcessing, onSlidesGenerated, isProce
 
           {/* File Upload Section */}
           <div className="text-center">
-            <p className="text-gray-500 mb-4">or</p>
+            <p className="text-gray-500 mb-6 text-lg font-medium tracking-wide">or</p>
             <label className="cursor-pointer">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-400 transition-colors">
-                <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-gray-600">Click to upload audio file</p>
-                <p className="text-sm text-gray-400 mt-2">MP3, WAV, M4A up to 25MB</p>
+              <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-blue-400 transition-colors">
+                <Upload className="w-10 h-10 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600 text-xl font-medium tracking-wide">Click to upload audio file</p>
+                <p className="text-lg text-gray-400 mt-3 font-medium">MP3, WAV, M4A up to 25MB</p>
               </div>
               <input
                 type="file"
@@ -221,15 +222,15 @@ export default function AudioUploader({ onProcessing, onSlidesGenerated, isProce
 
           {/* Audio Preview */}
           {audioBlob && (
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-gray-50 rounded-xl p-6">
               <div className="flex items-center justify-between">
-                <span className="text-gray-600">Audio ready</span>
+                <span className="text-gray-600 text-lg font-medium tracking-wide">Audio ready</span>
                 <button
                   onClick={playRecording}
-                  className="inline-flex items-center px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                  className="inline-flex items-center px-5 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
                   disabled={isProcessing}
                 >
-                  {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                  {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
                 </button>
               </div>
               <audio
@@ -246,11 +247,11 @@ export default function AudioUploader({ onProcessing, onSlidesGenerated, isProce
             <button
               onClick={processAudio}
               disabled={isProcessing}
-              className="w-full py-3 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              className="w-full py-5 px-8 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold text-xl tracking-wide"
             >
               {isProcessing ? (
                 <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
                   Processing Audio...
                 </div>
               ) : (
