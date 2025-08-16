@@ -87,13 +87,31 @@ export default function AudioUploader({ onProcessing, onSlidesGenerated, isProce
   };
 
   const processAudio = async () => {
-    if (!audioBlob) return;
+    if (!audioBlob) {
+      alert('No audio file selected. Please record or upload an audio file first.');
+      return;
+    }
+
+    console.log('Processing audio blob:', audioBlob.size, 'bytes, type:', audioBlob.type);
+
+    if (audioBlob.size === 0) {
+      alert('Audio file is empty. Please try recording or uploading again.');
+      return;
+    }
 
     onProcessing(true);
     
     try {
       const formData = new FormData();
-      formData.append('audio', audioBlob);
+      
+      // Create a proper filename if the blob doesn't have one
+      const filename = audioBlob instanceof File ? audioBlob.name : 'recording.wav';
+      const file = new File([audioBlob], filename, { 
+        type: audioBlob.type || 'audio/wav' 
+      });
+      
+      console.log('Uploading file:', file.name, 'Size:', file.size, 'Type:', file.type);
+      formData.append('audio', file);
 
       const transcribeResponse = await fetch('/api/transcribe', {
         method: 'POST',
@@ -101,10 +119,12 @@ export default function AudioUploader({ onProcessing, onSlidesGenerated, isProce
       });
 
       if (!transcribeResponse.ok) {
-        throw new Error('Transcription failed');
+        const errorData = await transcribeResponse.json();
+        throw new Error(errorData.error || 'Transcription failed');
       }
 
       const { transcription } = await transcribeResponse.json();
+      console.log('Transcription received:', transcription.substring(0, 100) + '...');
 
       const slidesResponse = await fetch('/api/generate-slides', {
         method: 'POST',
@@ -115,7 +135,8 @@ export default function AudioUploader({ onProcessing, onSlidesGenerated, isProce
       });
 
       if (!slidesResponse.ok) {
-        throw new Error('Slide generation failed');
+        const errorData = await slidesResponse.json();
+        throw new Error(errorData.error || 'Slide generation failed');
       }
 
       const { slides } = await slidesResponse.json();
@@ -123,7 +144,7 @@ export default function AudioUploader({ onProcessing, onSlidesGenerated, isProce
 
     } catch (error) {
       console.error('Error processing audio:', error);
-      alert('Error processing audio. Please try again.');
+      alert(`Error processing audio: ${error.message}`);
       onProcessing(false);
     }
   };
